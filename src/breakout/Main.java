@@ -16,16 +16,14 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 
-  public static final String LEVEL1 = "level1.txt";
-  public static final String LEVEL2 = "level2.txt";
-  public static final String LEVEL3 = "level3.txt";
+
   public static final String TITLE = "Breakout";
   public static final int FRAMES_PER_SECOND = 60;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
 
 
-  private String[] levelPaths = {LEVEL1, LEVEL2, LEVEL3};
+
   private Scene myScene;
   private Level level;
 
@@ -39,7 +37,7 @@ public class Main extends Application {
 
   @Override
   public void start(Stage stage) throws FileNotFoundException {
-    level = new Level(levelPaths[1]);
+    level = new Level();
 
     myScene = level.setupGame();
     stage.setScene(myScene);
