@@ -25,11 +25,7 @@ public class Main extends Application {
 
 
 
-  private String[] levelPaths = {
-      String.valueOf(this.getClass().getClassLoader().getResourceAsStream(LEVEL1)),
-      String.valueOf(this.getClass().getClassLoader().getResourceAsStream(LEVEL2)),
-      String.valueOf(this.getClass().getClassLoader().getResourceAsStream(LEVEL3))
-  };
+  private String[] levelPaths = {LEVEL1, LEVEL2, LEVEL3};
   private Scene myScene;
   private Level level;
 
