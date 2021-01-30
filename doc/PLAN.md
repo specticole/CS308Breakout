@@ -65,7 +65,9 @@ key:
 
 | o = open space
 
-| # = normal block (or randomly assigned hidden powerup)
+| # = normal block
+
+| @ = unbreakable block
 
 | X = automatic (shown) power up
 
@@ -76,7 +78,11 @@ Castle:
 
 |________________|
 
-|oBBooBBooBBooBBo|
+|o@@oo@@oo@@oo@@o|
+
+|oXXooXXooXXooXXo|
+
+|################|
 
 |################|
 
@@ -86,10 +92,6 @@ Castle:
 
 |######BooB######|
 
-|oooooooooooooooo|
-
-|oooooooooooooooo|
-
 |________________|
 
 ----------
@@ -98,19 +100,19 @@ Pyramid:
 
 |________________|
 
-|BBB##########BBB|
+|################|
 
-|oooo##XXXX##oooo|
+|o#####XXXX#####o|
 
-|ooooo##XX##ooooo|
+|oo#####XX#####oo|
+
+|ooo##########ooo|
+
+|oooo########oooo|
 
 |oooooo####oooooo|
 
 |ooooooo##ooooooo|
-
-|oooooooooooooooo|
-
-|oooooooooooooooo|
 
 |________________|
 
@@ -119,6 +121,7 @@ Pyramid:
 Demolition Derby:
 
 |________________|
+|################|
 
 |BBBBBBBBBBBBBBBB|
 
@@ -130,9 +133,7 @@ Demolition Derby:
 
 |BBBBBBBooBBBBBBB|
 
-|oooooooooooooooo|
-
-|oooooooooooooooo|
+|################|
 
 |________________|
 

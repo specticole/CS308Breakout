@@ -19,6 +19,8 @@ Hours Spent:
     https://docs.oracle.com/javafx/2/ui_controls/text-field.htm
 
     https://www.codota.com/code/java/methods/javafx.scene.layout.HBox/setBackground
+
+    https://stackoverflow.com/questions/30511324/javafx-how-to-set-center-position-for-text-or-label
 ### Running the Program
 
 Main class: 
