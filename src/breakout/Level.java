@@ -130,7 +130,7 @@ public class Level {
       }
     }
 
-    powerup.move(paddle, activeBalls, powerupBallQueue);
+    powerup.move(paddle, activeBalls, powerupBallQueue, allBricksOnScreen, BRICK_ROWS);
 
   }
 
