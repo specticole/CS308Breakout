@@ -12,6 +12,8 @@ public class Powerup {
 
   private static final String[] POWERUP_IMAGE_FILES = {"ballPowerup.gif", "lazerPowerup.gif", "paddlePowerup.gif"};
   private static final String LAZER_IMAGE = "lazerImage.gif";
+  private static final String LONG_PADDLE_IMAGE = "longPaddleImage.gif";
+  private static final String SHORT_PADDLE_IMAGE = "paddleImage.gif";
   private static final int BALL_NUMBER = 0;
   private static final int LAZER_NUMBER = 1;
   private static final int PADDLE_NUMBER = 2;
@@ -25,6 +27,7 @@ public class Powerup {
 
 
   private boolean isActive;
+  private boolean isLongPaddle = false;
   private boolean isLazer = false;
   private Queue<Powerup> powerupQueue;
   private ArrayList<ImageView> activeLazers;
@@ -35,7 +38,7 @@ public class Powerup {
     activeLazers = new ArrayList<>();
     droppingPowerups = new ArrayList<>();
     Random powerupChoser = new Random();
-    powerupNumber = 1; //powerupChoser.nextInt(POWERUP_IMAGE_FILES.length);
+    powerupNumber = 2; //powerupChoser.nextInt(POWERUP_IMAGE_FILES.length);
     powerupImage = new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(
         POWERUP_IMAGE_FILES[powerupNumber])));
     isActive = false;
@@ -111,6 +114,18 @@ public class Powerup {
         activeLazers.add(droppingPowerups.remove(index).powerupImage);
         break;
       case PADDLE_NUMBER:
+        if(!isLongPaddle) {
+          paddle.setImage(
+              new Image(this.getClass().getClassLoader().getResourceAsStream(LONG_PADDLE_IMAGE)));
+          droppingPowerups.remove(index);
+          isLongPaddle = true;
+        } else {
+          paddle.setImage(
+              new Image(this.getClass().getClassLoader().getResourceAsStream(SHORT_PADDLE_IMAGE)));
+          droppingPowerups.remove(index);
+          isLongPaddle = false;
+        }
+
         break;
     }
   }
