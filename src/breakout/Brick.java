@@ -1,6 +1,9 @@
 package breakout;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,61 +21,54 @@ public class Brick {
   public static final char UNBREAKABLE_CHAR = 'U';
   public static final char EMPTY_CHAR = 'E';
 
+
   Random powerupDropChance = new Random();
 
 
   private ImageView brickImage;
   private boolean hasPowerup;
   private char brickType;
-  private Powerup powerup;
 
-  public Brick(char brickType){
 
+  public Brick(char brickType, Group root){
     this.brickType = brickType;
     switch(brickType){
       case BASIC_CHAR:
-        boolean powerup = (powerupDropChance.nextInt(10) == 1);
-        brickImage = imageSetup(B_BRICK, powerup);
-        assignPowerup();
+        hasPowerup = (powerupDropChance.nextInt(10) == 1);
+        brickImage = imageSetup(B_BRICK);
         break;
       case XTRA_CHAR:
-        brickImage = imageSetup(X_BRICK, true);
-        assignPowerup();
+        hasPowerup = true;
+        brickImage = imageSetup(X_BRICK);
         break;
       case REINFORCED_CHAR:
-        brickImage = imageSetup(R_BRICK, false);
+        brickImage = imageSetup(R_BRICK);
         break;
       case UNBREAKABLE_CHAR:
-        brickImage = imageSetup(U_BRICK, false);
+        brickImage = imageSetup(U_BRICK);
         break;
       case EMPTY_CHAR:
-        brickImage = imageSetup(E_BRICK, false);
+        brickImage = imageSetup(E_BRICK);
         break;
     }
   }
 
-  private void assignPowerup(){
-    if(hasPowerup){
-      powerup = new Powerup();
-    }
-  }
 
-  public Powerup getPowerup(){
-    return powerup;
-  }
-
-  private ImageView imageSetup(String fileName, boolean powerup){
-    hasPowerup = powerup;
+  private ImageView imageSetup(String fileName){
     return new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(fileName)));
   }
 
-  public int isHit(){
+  public int isHit(Powerup powerup, double x, double y){
     switch(brickType) {
       case BASIC_CHAR:
         switchImage(E_BRICK, EMPTY_CHAR);
+        if(hasPowerup){
+          powerup.startDrop(x, y);
+        }
         return 50;
       case XTRA_CHAR:
         switchImage(E_BRICK, EMPTY_CHAR);
+        powerup.startDrop(x, y);
         return 50;
       case REINFORCED_CHAR:
         switchImage(B_BRICK, BASIC_CHAR);
@@ -102,6 +98,7 @@ public class Brick {
   public boolean inPlay(){
     return (brickType != EMPTY_CHAR);
   }
+
 
 
 

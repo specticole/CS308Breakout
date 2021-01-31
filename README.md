@@ -10,7 +10,7 @@ Start Date: January 29, 2021
 
 Finish Date: 
 
-Hours Spent:
+Hours Spent: 2
 
 ### Resources Used
 
