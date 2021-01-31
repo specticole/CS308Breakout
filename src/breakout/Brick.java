@@ -1,5 +1,6 @@
 package breakout;
 
+import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -10,26 +11,33 @@ public class Brick {
   private static final String R_BRICK = "reinforcedBrick.gif";
   private static final String U_BRICK = "unbreakableBrick.gif";
   private static final String E_BRICK = "emptyBrick.gif";
-  private static final String X_BRICK = "basicBrick.gif";
+  private static final String X_BRICK = "powerupBrick.gif";
   public static final char BASIC_CHAR = 'B';
   public static final char XTRA_CHAR = 'X';
   public static final char REINFORCED_CHAR = 'R';
   public static final char UNBREAKABLE_CHAR = 'U';
   public static final char EMPTY_CHAR = 'E';
 
+  Random powerupDropChance = new Random();
+
 
   private ImageView brickImage;
   private boolean hasPowerup;
   private char brickType;
+  private Powerup powerup;
 
   public Brick(char brickType){
+
     this.brickType = brickType;
     switch(brickType){
       case BASIC_CHAR:
-        brickImage = imageSetup(B_BRICK, false);
+        boolean powerup = (powerupDropChance.nextInt(10) == 1);
+        brickImage = imageSetup(B_BRICK, powerup);
+        assignPowerup();
         break;
       case XTRA_CHAR:
         brickImage = imageSetup(X_BRICK, true);
+        assignPowerup();
         break;
       case REINFORCED_CHAR:
         brickImage = imageSetup(R_BRICK, false);
@@ -41,6 +49,16 @@ public class Brick {
         brickImage = imageSetup(E_BRICK, false);
         break;
     }
+  }
+
+  private void assignPowerup(){
+    if(hasPowerup){
+      powerup = new Powerup();
+    }
+  }
+
+  public Powerup getPowerup(){
+    return powerup;
   }
 
   private ImageView imageSetup(String fileName, boolean powerup){
@@ -62,7 +80,7 @@ public class Brick {
       case UNBREAKABLE_CHAR:
         return 1;
       case EMPTY_CHAR:
-        break;
+        return 0;
     }
     return 0;
   }
@@ -84,6 +102,7 @@ public class Brick {
   public boolean inPlay(){
     return (brickType != EMPTY_CHAR);
   }
+
 
 
 
