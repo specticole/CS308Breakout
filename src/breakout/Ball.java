@@ -10,6 +10,7 @@ public class Ball {
   public static final String BALL_IMAGE_NAME = "ballImage.gif";
   public static final double BALL_X_SPEED = 1;
   public static final double BALL_Y_SPEED = 2;
+  public static final int POWERUP_BALL_OFFSET = 10;
 
 
   private final ImageView BALL_IMAGE  = new ImageView(new Image(
@@ -104,6 +105,21 @@ public class Ball {
 
     }
     return false;
+  }
+
+  public void powerupBallActivate(ImageView paddle, ArrayList<Ball> activeBalls){
+    BALL_IMAGE.setX(paddle.getX() + paddle.getBoundsInLocal().getWidth()/2);
+    BALL_IMAGE.setY(paddle.getY() - POWERUP_BALL_OFFSET);
+    inPlay = true;
+    activeBalls.add(this);
+  }
+
+  public boolean ballHitFloor(ArrayList<Ball> activeBalls){
+    BALL_IMAGE.setX(0);
+    BALL_IMAGE.setY(0);
+    inPlay = false;
+    activeBalls.remove(this);
+    return (activeBalls.size() != 0);
   }
 
 }

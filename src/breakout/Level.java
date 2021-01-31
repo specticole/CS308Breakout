@@ -3,16 +3,12 @@ package breakout;
 import java.io.FileNotFoundException;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import java.util.*;
-import javafx.scene.text.Text;
-import jdk.jshell.Snippet.Status;
 
 public class Level {
 
@@ -30,6 +26,7 @@ public class Level {
   public static final int BRICK_OFFSET = 30;
   public static final int BRICKS_PER_LEVEL = 112;
   public static final int PADDLE_Y_BARRIER = 50;
+  public static final int MAX_BALLS = 4;
   public static final String PADDLE_IMAGE = "paddleImage.gif";
   public static final Paint BACKGROUND = Color.PURPLE;
 
@@ -49,10 +46,14 @@ public class Level {
   private Powerup powerup;
 
   private ArrayList<ArrayList<Brick>> allBricksOnScreen;
+  private ArrayList<Ball> activeBalls;
+  private Queue<Ball> powerupBallQueue;
 
 
   public Level() throws FileNotFoundException {
     allBricksOnScreen = new ArrayList<>();
+    activeBalls = new ArrayList<>();
+    powerupBallQueue = new LinkedList<>();
   }
 
 
@@ -70,12 +71,21 @@ public class Level {
     paddleSetup();
     root.getChildren().add(paddle);
     startingBall = new Ball(root, statusDisplay);
+    activeBalls.add(startingBall);
     startingBall.setup(WIDTH/2 - paddle.getBoundsInLocal().getWidth()/2, paddle.getY() - BALL_OFFSET, true);
-
+    fillPowerupBallQueue();
 
     Scene scene = new Scene(root, WIDTH, HEIGHT, BACKGROUND);
     scene.setOnKeyPressed(event -> handleUserInput(event.getCode()));
     return scene;
+  }
+
+  private void fillPowerupBallQueue(){
+    for (int i = 0; i < MAX_BALLS; i++){
+      Ball powerupBall = new Ball(root, statusDisplay);
+      powerupBall.setup(0, 0, false);
+      powerupBallQueue.add(powerupBall);
+    }
   }
 
   private void putBricksOnScreen(){
@@ -111,10 +121,16 @@ public class Level {
 
   public void step(double stepTime){
 
-    if (startingBall.move(WIDTH, HEIGHT, statusDisplay.getStatusBarHeight(), allBricksOnScreen, BRICK_ROWS, paddle, powerup)){
-      lostLife();
+
+    for(Ball ball : activeBalls){
+      if (ball.move(WIDTH, HEIGHT, statusDisplay.getStatusBarHeight(), allBricksOnScreen, BRICK_ROWS, paddle, powerup)){
+        if(ball.ballHitFloor(activeBalls)){
+          lostLife();
+        }
+      }
     }
-    powerup.drop();
+
+    powerup.move(paddle, activeBalls, powerupBallQueue);
 
   }
 

@@ -34,7 +34,7 @@ public class Brick {
     this.brickType = brickType;
     switch(brickType){
       case BASIC_CHAR:
-        hasPowerup = (powerupDropChance.nextInt(10) == 1);
+        hasPowerup = (powerupDropChance.nextInt(2) == 1);
         brickImage = imageSetup(B_BRICK);
         break;
       case XTRA_CHAR:
