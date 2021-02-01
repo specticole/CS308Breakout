@@ -70,6 +70,11 @@ public class StatusDisplay {
     livesText.setText("Lives: "+ lives);
   }
 
+  public void extraLife(){
+    lives = lives + 1;
+    livesText.setText("Lives: "+ lives);
+  }
+
   public void setLevel(int level){
     this.level = level;
     levelText.setText("Level: " + level);

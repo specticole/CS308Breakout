@@ -49,7 +49,7 @@ public class SplashScreen {
       case WON_GAME:
         printText = "You won the game :)"
             + "\n\n"
-            + "You had " + statusDisplay.getLives() + "left"
+            + "You had " + statusDisplay.getLives() + " lives left"
             + "\n and had a score of " + statusDisplay.getScore()
             + "\n\n"
             + "press ENTER to start over";

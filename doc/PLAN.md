@@ -50,7 +50,7 @@ a specific key (most likely shift).
 
 The four different cheat keys I plan to implement is 
 adding a barriar around the screen so that the player cannot
-lost, but, because this is a Devilish style game where the objective
+lose, but, because this is a Devilish style game where the objective
 is to get to the top of the screen, they cannot win either.
   I also plan to add a cheat which clears all blocks in the level, 
 a cheat which increases the paddle movement speed, and which

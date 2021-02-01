@@ -8,8 +8,7 @@ import javafx.scene.image.ImageView;
 
 public class Ball {
   public static final String BALL_IMAGE_NAME = "ballImage.gif";
-  public static final double BALL_X_SPEED = 1;
-  public static final double BALL_Y_SPEED = 2;
+
   public static final int POWERUP_BALL_OFFSET = 10;
   public static final int BALL_IN_PLAY = 0;
   public static final int BALL_LOST = -1;
@@ -23,6 +22,8 @@ public class Ball {
   private Group root;
   private StatusDisplay statusDisplay;
   private boolean inPlay;
+  private double ballXSpeed = 1;
+  private double ballYSpeed = 2;
 
   public Ball(Group root, StatusDisplay statusDisplay){
     ballLeftRight = new Random().nextBoolean() ? -1 : 1;
@@ -108,8 +109,8 @@ public class Ball {
 
         }
       }
-      BALL_IMAGE.setX(BALL_IMAGE.getX() + (BALL_X_SPEED * ballLeftRight));
-      BALL_IMAGE.setY(BALL_IMAGE.getY() + (BALL_Y_SPEED * ballUpDown));
+      BALL_IMAGE.setX(BALL_IMAGE.getX() + (ballXSpeed * ballLeftRight));
+      BALL_IMAGE.setY(BALL_IMAGE.getY() + (ballYSpeed * ballUpDown));
 
     }
     return BALL_IN_PLAY;
@@ -151,6 +152,18 @@ public class Ball {
     BALL_IMAGE.setX(0);
     BALL_IMAGE.setY(0);
     BALL_IMAGE.setOpacity(0);
+  }
+
+  public void upSpeed(){
+    ballYSpeed += 1;
+    ballXSpeed += .5;
+  }
+
+  public void lowerSpeed(){
+    if(ballXSpeed > 0) {
+      ballYSpeed -= 1;
+      ballXSpeed -= .5;
+    }
   }
 
 }

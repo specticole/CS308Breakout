@@ -15,8 +15,7 @@ public class Level {
   public static final int PADDLE_OFFSET = 10;
   public static final int BALL_OFFSET = 10;
   public static final int STATUS_BAR_OUTLINE_OFFSET = 20;
-  public static final int PADDLE_X_SPEED = 10;
-  public static final int PADDLE_Y_SPEED = 5;
+
   public static final int WIDTH = 300;
   public static final int HEIGHT = 400;
   public static final int STARTING_LIVES = 3;
@@ -38,7 +37,8 @@ public class Level {
   public static final int START_GAME = 0;
 
 
-
+  private int paddleXSpeed = 10;
+  private int paddleYSpeed = 5;
 
   private ImageView paddle = new ImageView(
       new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE)));
@@ -46,7 +46,9 @@ public class Level {
   public static final String LEVEL1 = "level1.txt";
   public static final String LEVEL2 = "level2.txt";
   public static final String LEVEL3 = "level3.txt";
-  private String[] levelPaths = {LEVEL1, LEVEL2, LEVEL3};
+  public static final String EMPTYLEVEL = "emptyLevel.txt";
+
+  private String[] levelPaths = {LEVEL1, LEVEL2, LEVEL3, EMPTYLEVEL};
 
   private StatusDisplay statusDisplay;
   private Ball startingBall;
@@ -99,7 +101,7 @@ public class Level {
 
   private void brickLayer(){
     setupAllBricksOnScreen();
-    getBricksFromFile();
+    getBricksFromFile(levelPaths[statusDisplay.getLevel()]);
     putBricksOnScreen();
   }
 
@@ -126,9 +128,8 @@ public class Level {
     }
   }
 
-  private void getBricksFromFile(){
-    Scanner input = new Scanner(this.getClass().getClassLoader().getResourceAsStream(levelPaths[statusDisplay
-        .getLevel()]));
+  private void getBricksFromFile(String fileName){
+    Scanner input = new Scanner(this.getClass().getClassLoader().getResourceAsStream(fileName));
 
     for(int row = 0; row < BRICK_ROWS; row++){
       String brickRow = input.next();
@@ -189,27 +190,70 @@ public class Level {
   }
 
 
-  public void handleUserInput(KeyCode keyPressed){
-    if(keyPressed == KeyCode.RIGHT && (paddle.getX() + paddle.getBoundsInLocal().getWidth()) < WIDTH){
-      paddle.setX(paddle.getX() + PADDLE_X_SPEED);
-    } else if (keyPressed == KeyCode.LEFT && paddle.getX() > 0){
-      paddle.setX(paddle.getX() - PADDLE_X_SPEED);
-    } else if (keyPressed == KeyCode.UP && paddle.getY() >= HEIGHT - PADDLE_Y_BARRIER){
-      paddle.setY(paddle.getY() - PADDLE_Y_SPEED);
-    } else if (keyPressed == KeyCode.DOWN && (paddle.getY() + paddle.getBoundsInLocal().getHeight()) <= HEIGHT){
-      paddle.setY(paddle.getY() + PADDLE_Y_SPEED);
+  public void handleUserInput(KeyCode keyPressed) {
+
+    //paddle movement
+    if (keyPressed == KeyCode.RIGHT
+        && (paddle.getX() + paddle.getBoundsInLocal().getWidth()) < WIDTH) {
+      paddle.setX(paddle.getX() + paddleXSpeed);
+    } else if (keyPressed == KeyCode.LEFT && paddle.getX() > 0) {
+      paddle.setX(paddle.getX() - paddleXSpeed);
+    } else if (keyPressed == KeyCode.UP && paddle.getY() >= HEIGHT - PADDLE_Y_BARRIER) {
+      paddle.setY(paddle.getY() - paddleYSpeed);
+    } else if (keyPressed == KeyCode.DOWN
+        && (paddle.getY() + paddle.getBoundsInLocal().getHeight()) <= HEIGHT) {
+      paddle.setY(paddle.getY() + paddleYSpeed);
     }
 
-    if(keyPressed == KeyCode.ENTER){
-      if(gameOver){
+    //splash screen hide
+    if (keyPressed == KeyCode.ENTER) {
+      if (gameOver) {
         gameOver = false;
         splashScreen.hide();
       }
     }
 
-
+    //cheats
+    if (keyPressed == KeyCode.L) {
+      statusDisplay.extraLife();
+    } else if (keyPressed == KeyCode.R) {
+      paddleSetup();
+      clearActiveBalls();
+      activeBalls.add(startingBall);
+      startingBall.levelRefresh(paddle);
+    } else if (keyPressed == KeyCode.DIGIT0) {
+      goToLevel(0);
+    } else if (keyPressed == KeyCode.DIGIT1) {
+      goToLevel(1);
+    } else if (keyPressed == KeyCode.DIGIT2
+        || keyPressed == KeyCode.DIGIT3
+        || keyPressed == KeyCode.DIGIT4
+        || keyPressed == KeyCode.DIGIT5
+        || keyPressed == KeyCode.DIGIT6
+        || keyPressed == KeyCode.DIGIT7
+        || keyPressed == KeyCode.DIGIT8
+        || keyPressed == KeyCode.DIGIT9) {
+    goToLevel(2);
+    } else if(keyPressed == KeyCode.W) {
+      paddleXSpeed += 4;
+      paddleYSpeed += 2;
+    } else if (keyPressed == KeyCode.S) {
+      if(paddleYSpeed > 0) {
+        paddleXSpeed -= 4;
+        paddleYSpeed -= 2;
+      }
+    } else if (keyPressed == KeyCode.A) {
+      for(Ball b : activeBalls) {
+        b.lowerSpeed();
+      }
+    } else if (keyPressed == KeyCode.D) {
+      for(Ball b : activeBalls) {
+        b.upSpeed();
+      }
+    } else if (keyPressed == KeyCode.C) {
+      getBricksFromFile(levelPaths[levelPaths.length-1]);
+    }
   }
-
 
   public void goToNextLevel(){
     goToLevel(statusDisplay.getLevel() + 1);
@@ -223,9 +267,8 @@ public class Level {
       paddleSetup();
       startingBall.levelRefresh(paddle);
       statusDisplay.setLevel(level);
-      if (!(statusDisplay.getLevel() > MAX_LEVEL)) {
-        getBricksFromFile();
-      }
+      getBricksFromFile(levelPaths[statusDisplay
+            .getLevel()]);
       activeBalls.add(startingBall);
       startingBall.levelStart();
     }
