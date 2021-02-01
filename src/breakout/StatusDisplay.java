@@ -99,7 +99,7 @@ public class StatusDisplay {
 
   public void reset(){
     level = 0;
-    levelText.setText("Level: " + score);
+    levelText.setText("Level: " + level);
 
     score = 0;
     scoreText.setText("Score: " + score);

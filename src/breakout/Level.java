@@ -253,6 +253,8 @@ public class Level {
       }
     } else if (keyPressed == KeyCode.C) {
       getBricksFromFile(levelPaths[levelPaths.length-1]);
+    } else if (keyPressed == KeyCode.P) {
+      powerup.startDrop(WIDTH/2, 0);
     }
   }
 
