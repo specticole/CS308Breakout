@@ -70,9 +70,9 @@ public class StatusDisplay {
     livesText.setText("Lives: "+ lives);
   }
 
-  public void nextLevel(){
-    level += 1;
-    levelText.setText("Level: " + score);
+  public void setLevel(int level){
+    this.level = level;
+    levelText.setText("Level: " + level);
   }
 
   public void updateScore(int pointsAdded){
@@ -88,4 +88,22 @@ public class StatusDisplay {
     return STATUS_BAR_HEIGHT;
   }
 
+  public int getLives(){
+    return lives;
+  }
+
+  public void reset(){
+    level = 0;
+    levelText.setText("Level: " + score);
+
+    score = 0;
+    scoreText.setText("Score: " + score);
+
+    lives = STARTING_LIVES;
+    livesText.setText("Lives: "+ lives);
+  }
+
+  public int getScore(){
+    return score;
+  }
 }

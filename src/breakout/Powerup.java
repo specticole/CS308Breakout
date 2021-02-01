@@ -38,7 +38,7 @@ public class Powerup {
     activeLazers = new ArrayList<>();
     droppingPowerups = new ArrayList<>();
     Random powerupChoser = new Random();
-    powerupNumber = 0; //powerupChoser.nextInt(POWERUP_IMAGE_FILES.length);
+    powerupNumber = powerupChoser.nextInt(POWERUP_IMAGE_FILES.length);
     powerupImage = new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(
         POWERUP_IMAGE_FILES[powerupNumber])));
     isActive = false;
@@ -71,8 +71,7 @@ public class Powerup {
           powerup.isActive = true;
           powerup.powerupImage.setX(0);
           powerup.powerupImage.setY(0);
-          //droppingPowerups.remove(index);
-          activatePowerup(paddle, activeBalls, powerupBallQueue, index);
+          activatePowerup(paddle, activeBalls, powerupBallQueue, index, powerup.powerupNumber);
         }
 
       index ++;
@@ -99,7 +98,7 @@ public class Powerup {
 
   }
 
-  private void activatePowerup(ImageView paddle, ArrayList<Ball> activeBalls, Queue<Ball> powerupBallQueue, int index){
+  private void activatePowerup(ImageView paddle, ArrayList<Ball> activeBalls, Queue<Ball> powerupBallQueue, int index, int powerupNumber){
     switch(powerupNumber){
       case BALL_NUMBER:
         Ball addedBall = powerupBallQueue.remove();
@@ -128,6 +127,18 @@ public class Powerup {
 
         break;
     }
+  }
+
+  public void clearPowerups(){
+    for(Powerup powerup : droppingPowerups){
+      powerup.powerupImage.setOpacity(0);
+    }
+    droppingPowerups.clear();
+
+    for(ImageView lazer : activeLazers){
+      lazer.setOpacity(0);
+    }
+    activeLazers.clear();
   }
 
 

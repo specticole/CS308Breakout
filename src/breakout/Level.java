@@ -33,6 +33,10 @@ public class Level {
   public static final int BALL_LOST = -1;
   public static final int BALL_WON = 1;
   public static final int MAX_LEVEL = 3;
+  public static final int WON_GAME = 1;
+  public static final int LOST_GAME = -1;
+  public static final int START_GAME = 0;
+
 
 
 
@@ -48,10 +52,12 @@ public class Level {
   private Ball startingBall;
   private Group root;
   private Powerup powerup;
+  private boolean gameOver = true;
 
   private ArrayList<ArrayList<Brick>> allBricksOnScreen;
   private ArrayList<Ball> activeBalls;
   private Queue<Ball> powerupBallQueue;
+  private SplashScreen splashScreen;
 
 
   public Level() throws FileNotFoundException {
@@ -59,8 +65,6 @@ public class Level {
     activeBalls = new ArrayList<>();
     powerupBallQueue = new LinkedList<>();
   }
-
-
 
 
 
@@ -77,6 +81,8 @@ public class Level {
     activeBalls.add(startingBall);
     startingBall.setup(WIDTH/2 - paddle.getBoundsInLocal().getWidth()/2, paddle.getY() - BALL_OFFSET, true);
     fillPowerupBallQueue();
+    splashScreen = new SplashScreen(root);
+    splashScreen.showSplashScreen(START_GAME, statusDisplay);
 
     Scene scene = new Scene(root, WIDTH, HEIGHT, BACKGROUND);
     scene.setOnKeyPressed(event -> handleUserInput(event.getCode()));
@@ -138,30 +144,48 @@ public class Level {
     paddle.setY(HEIGHT - PADDLE_OFFSET);
   }
 
-  private void paddleRefresh(){
-
-  }
 
   public void step(double stepTime){
 
-
-    for(Ball ball : activeBalls){
-      switch (ball.move(WIDTH, HEIGHT, statusDisplay.getStatusBarHeight(), allBricksOnScreen, BRICK_ROWS, paddle, powerup, activeBalls)){
-        case BALL_LOST:
-          lostLife();
-          break;
-        case BALL_WON:
-          goToNextLevel();
-          break;
+    if(!gameOver) {
+      for (Ball ball : activeBalls) {
+        switch (ball
+            .move(WIDTH, HEIGHT, statusDisplay.getStatusBarHeight(), allBricksOnScreen, BRICK_ROWS,
+                paddle, powerup, activeBalls)) {
+          case BALL_LOST:
+            lostLife();
+            break;
+          case BALL_WON:
+            goToNextLevel();
+            break;
+        }
       }
+
+      powerup.move(paddle, activeBalls, powerupBallQueue, allBricksOnScreen, BRICK_ROWS);
     }
-
-    powerup.move(paddle, activeBalls, powerupBallQueue, allBricksOnScreen, BRICK_ROWS);
-
   }
 
   private void lostLife(){
-    statusDisplay.loseLife();
+
+    if(statusDisplay.getLives() <= 0){
+      gameOver(LOST_GAME);
+    } else {
+      statusDisplay.loseLife();
+      powerup.clearPowerups();
+      paddleSetup();
+      startingBall.levelRefresh(paddle);
+      activeBalls.add(startingBall);
+      startingBall.levelStart();
+    }
+
+  }
+
+  private void gameOver(int gameCondition){
+    gameOver = true;
+    clearActiveBalls();
+    splashScreen.showSplashScreen(gameCondition, statusDisplay);
+    goToLevel(0);
+    statusDisplay.reset();
   }
 
 
@@ -176,21 +200,35 @@ public class Level {
       paddle.setY(paddle.getY() + PADDLE_Y_SPEED);
     }
 
+    if(keyPressed == KeyCode.ENTER){
+      if(gameOver){
+        gameOver = false;
+        splashScreen.hide();
+      }
+    }
+
+
   }
 
 
   public void goToNextLevel(){
-
-    clearActiveBalls();
-    paddleSetup();
-    startingBall.levelRefresh(paddle);
-    statusDisplay.nextLevel();
-    if(!(statusDisplay.getLevel() > MAX_LEVEL)){
-      getBricksFromFile();
+    goToLevel(statusDisplay.getLevel() + 1);
+  }
+  private void goToLevel(int level){
+    if(level >= 3){
+      gameOver(WON_GAME);
+    } else {
+      clearActiveBalls();
+      powerup.clearPowerups();
+      paddleSetup();
+      startingBall.levelRefresh(paddle);
+      statusDisplay.setLevel(level);
+      if (!(statusDisplay.getLevel() > MAX_LEVEL)) {
+        getBricksFromFile();
+      }
+      activeBalls.add(startingBall);
+      startingBall.levelStart();
     }
-    activeBalls.add(startingBall);
-    startingBall.levelStart();
-
   }
 
   private void clearActiveBalls(){

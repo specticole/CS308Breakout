@@ -37,8 +37,9 @@ public class Main extends Application {
 
   @Override
   public void start(Stage stage) throws FileNotFoundException {
-    level = new Level();
 
+
+    level = new Level();
     myScene = level.setupGame();
     stage.setScene(myScene);
     stage.setTitle(TITLE);
