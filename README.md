@@ -8,9 +8,9 @@ Name: Cole Spector
 
 Start Date: January 29, 2021
 
-Finish Date: 
+Finish Date: February 1, 2021
 
-Hours Spent: 2
+Hours Spent: 16
 
 ### Resources Used
 
@@ -30,10 +30,16 @@ Main class:
 Data files needed: 
 
     text files:
-    level1.txt, level2.txt, level3.txt
+    level1.txt, level2.txt, level3.txt, emptyLevel.txt
 
     image files:
-    ballImage.gif, paddleImage.gif
+    for Level.java:
+        paddleImage.gif
+        longPaddleImage.gif
+    for Ball.java:
+        ballImage.gif
+    for Powerup.java:
+        
 
 Key/Mouse inputs:
 

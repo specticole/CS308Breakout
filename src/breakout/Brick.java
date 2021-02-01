@@ -42,7 +42,7 @@ public class Brick {
     this.brickType = brickType;
     switch(brickType){
       case BASIC_CHAR:
-        hasPowerup = true; //(powerupDropChance.nextInt(2) == 1);
+        hasPowerup = (powerupDropChance.nextInt(10) == 1);
         brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(B_BRICK)));
         break;
       case XTRA_CHAR:

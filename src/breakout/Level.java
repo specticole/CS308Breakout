@@ -221,6 +221,7 @@ public class Level {
       clearActiveBalls();
       activeBalls.add(startingBall);
       startingBall.levelRefresh(paddle);
+      startingBall.levelStart();
     } else if (keyPressed == KeyCode.DIGIT0) {
       goToLevel(0);
     } else if (keyPressed == KeyCode.DIGIT1) {
