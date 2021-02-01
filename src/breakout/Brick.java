@@ -28,35 +28,43 @@ public class Brick {
   private ImageView brickImage;
   private boolean hasPowerup;
   private char brickType;
+  private Group root;
 
 
-  public Brick(char brickType, Group root){
+  public Brick(Group root){
+    //this.root = root;
+    brickImage = new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(B_BRICK)));
+    //this.brickType = brickType;
+    //setBrickProperties(brickType);
+  }
+
+  public void setBrickProperties(char brickType) {
     this.brickType = brickType;
     switch(brickType){
       case BASIC_CHAR:
         hasPowerup = (powerupDropChance.nextInt(2) == 1);
-        brickImage = imageSetup(B_BRICK);
+        brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(B_BRICK)));
         break;
       case XTRA_CHAR:
         hasPowerup = true;
-        brickImage = imageSetup(X_BRICK);
+        brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(X_BRICK)));
         break;
       case REINFORCED_CHAR:
-        brickImage = imageSetup(R_BRICK);
+        brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(R_BRICK)));
         break;
       case UNBREAKABLE_CHAR:
-        brickImage = imageSetup(U_BRICK);
+        brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(U_BRICK)));
         break;
       case EMPTY_CHAR:
-        brickImage = imageSetup(E_BRICK);
+        brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(E_BRICK)));
         break;
     }
   }
 
 
-  private ImageView imageSetup(String fileName){
-    return new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(fileName)));
-  }
+//  private ImageView imageSetup(String fileName){
+//    return new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(fileName)));
+//  }
 
   public int isHit(Powerup powerup, double x, double y){
     switch(brickType) {
@@ -98,7 +106,6 @@ public class Brick {
   public boolean inPlay(){
     return (brickType != EMPTY_CHAR);
   }
-
 
 
 

@@ -26,9 +26,13 @@ public class Level {
   public static final int BRICK_OFFSET = 30;
   public static final int BRICKS_PER_LEVEL = 112;
   public static final int PADDLE_Y_BARRIER = 50;
-  public static final int MAX_BALLS = 4;
+  public static final int MAX_BALLS = 1000;
   public static final String PADDLE_IMAGE = "paddleImage.gif";
   public static final Paint BACKGROUND = Color.PURPLE;
+  public static final int BALL_IN_PLAY = 0;
+  public static final int BALL_LOST = -1;
+  public static final int BALL_WON = 1;
+  public static final int MAX_LEVEL = 3;
 
 
 
@@ -66,8 +70,7 @@ public class Level {
     powerup.setup(root);
     statusDisplay = new StatusDisplay(root);
     statusDisplay.setup(WIDTH);
-    getBricksFromFile();
-    putBricksOnScreen();
+    brickLayer();
     paddleSetup();
     root.getChildren().add(paddle);
     startingBall = new Ball(root, statusDisplay);
@@ -88,6 +91,12 @@ public class Level {
     }
   }
 
+  private void brickLayer(){
+    setupAllBricksOnScreen();
+    getBricksFromFile();
+    putBricksOnScreen();
+  }
+
   private void putBricksOnScreen(){
     for(int row = 0; row < BRICK_ROWS; row++){
       for(int col = 0; col < BRICK_COLS; col++){
@@ -100,33 +109,50 @@ public class Level {
     }
   }
 
+
+  private void setupAllBricksOnScreen(){
+    for(int row = 0; row < BRICK_ROWS; row++) {
+      allBricksOnScreen.add(new ArrayList<Brick>());
+      for (int col = 0; col < BRICK_COLS; col++) {
+        allBricksOnScreen.get(row).add(new Brick(root));
+
+      }
+    }
+  }
+
   private void getBricksFromFile(){
     Scanner input = new Scanner(this.getClass().getClassLoader().getResourceAsStream(levelPaths[statusDisplay
         .getLevel()]));
-    allBricksOnScreen.clear();
 
     for(int row = 0; row < BRICK_ROWS; row++){
-      allBricksOnScreen.add(new ArrayList<Brick>());
       String brickRow = input.next();
       for(int col = 0; col < BRICK_COLS; col++){
-        allBricksOnScreen.get(row).add(new Brick(brickRow.charAt(col), root));
+          allBricksOnScreen.get(row).get(col).setBrickProperties(brickRow.charAt(col));
       }
     }
   }
 
   private void paddleSetup() {
+    paddle.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE)));
     paddle.setX(WIDTH/2 - paddle.getBoundsInLocal().getWidth()/2);
     paddle.setY(HEIGHT - PADDLE_OFFSET);
+  }
+
+  private void paddleRefresh(){
+
   }
 
   public void step(double stepTime){
 
 
     for(Ball ball : activeBalls){
-      if (ball.move(WIDTH, HEIGHT, statusDisplay.getStatusBarHeight(), allBricksOnScreen, BRICK_ROWS, paddle, powerup)){
-        if(ball.ballHitFloor(activeBalls)){
+      switch (ball.move(WIDTH, HEIGHT, statusDisplay.getStatusBarHeight(), allBricksOnScreen, BRICK_ROWS, paddle, powerup, activeBalls)){
+        case BALL_LOST:
           lostLife();
-        }
+          break;
+        case BALL_WON:
+          goToNextLevel();
+          break;
       }
     }
 
@@ -150,6 +176,28 @@ public class Level {
       paddle.setY(paddle.getY() + PADDLE_Y_SPEED);
     }
 
+  }
+
+
+  public void goToNextLevel(){
+
+    clearActiveBalls();
+    paddleSetup();
+    startingBall.levelRefresh(paddle);
+    statusDisplay.nextLevel();
+    if(!(statusDisplay.getLevel() > MAX_LEVEL)){
+      getBricksFromFile();
+    }
+    activeBalls.add(startingBall);
+    startingBall.levelStart();
+
+  }
+
+  private void clearActiveBalls(){
+    for(Ball b : activeBalls){
+      b.destroy();
+    }
+    activeBalls.clear();
   }
 
 

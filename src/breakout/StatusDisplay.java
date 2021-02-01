@@ -31,14 +31,14 @@ public class StatusDisplay {
    }
 
    public void setup(int screenWidth){
-//       level = STARTING_LEVEL;
+       level = STARTING_LEVEL;
        score = 0;
-//       lives = STARTING_LIVES;
-       levelText = new Text("  Level: "+ STARTING_LEVEL);
+       lives = STARTING_LIVES;
+       levelText = new Text("  Level: "+ level);
        textSetup(levelText, 0);
-       scoreText = new Text("Score: "+ 0);
+       scoreText = new Text("Score: "+ score);
        textSetup(scoreText, screenWidth/2 - scoreText.getBoundsInParent().getWidth()/2);
-       livesText = new Text("Lives: "+ STARTING_LIVES);
+       livesText = new Text("Lives: "+ lives);
        textSetup(livesText, screenWidth- scoreText.getBoundsInParent().getWidth());
        //statusBar.getChildren().addAll(levelLabel, scoreLabel, livesLabel);
        //statusBar.setBackground(new Background(new BackgroundFill(Color.GREEN,null,null)));
@@ -64,9 +64,15 @@ public class StatusDisplay {
   public void updateLives(int lives){
     livesText.setText("Lives: "+ lives);
   }
+
   public void loseLife(){
-    lives -= 1;
+    lives = lives - 1;
     livesText.setText("Lives: "+ lives);
+  }
+
+  public void nextLevel(){
+    level += 1;
+    levelText.setText("Level: " + score);
   }
 
   public void updateScore(int pointsAdded){

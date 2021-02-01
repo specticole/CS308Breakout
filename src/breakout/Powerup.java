@@ -38,7 +38,7 @@ public class Powerup {
     activeLazers = new ArrayList<>();
     droppingPowerups = new ArrayList<>();
     Random powerupChoser = new Random();
-    powerupNumber = 2; //powerupChoser.nextInt(POWERUP_IMAGE_FILES.length);
+    powerupNumber = 0; //powerupChoser.nextInt(POWERUP_IMAGE_FILES.length);
     powerupImage = new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(
         POWERUP_IMAGE_FILES[powerupNumber])));
     isActive = false;
