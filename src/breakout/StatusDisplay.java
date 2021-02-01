@@ -40,12 +40,6 @@ public class StatusDisplay {
        textSetup(scoreText, screenWidth/2 - scoreText.getBoundsInParent().getWidth()/2);
        livesText = new Text("Lives: "+ lives);
        textSetup(livesText, screenWidth- scoreText.getBoundsInParent().getWidth());
-       //statusBar.getChildren().addAll(levelLabel, scoreLabel, livesLabel);
-       //statusBar.setBackground(new Background(new BackgroundFill(Color.GREEN,null,null)));
-       //statusBar.setSpacing(WIDTH/5);
-       //statusBar.setLayoutY(0);
-       //statusBar.setLayoutX(0);
-       //statusBar.setMaxWidth(WIDTH);
        statusBarOutline = new Rectangle(0, 0, screenWidth, STATUS_BAR_HEIGHT);
        statusBarOutline.setFill(Color.BLACK);
        root.getChildren().add(statusBarOutline);
