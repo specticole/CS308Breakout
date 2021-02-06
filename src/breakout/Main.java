@@ -12,7 +12,11 @@ import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * @author Cole Spector
+ * This is the class with the main method, and starts the game
+ * This class is dependant on Level.java
+ * run this class within your preferred java engine
+ *
  */
 public class Main extends Application {
 
@@ -36,6 +40,11 @@ public class Main extends Application {
   }
 
   @Override
+  /**
+   * This method starts the game, and sets up the stage
+   * This method is called with launch(args).
+   * This method takes in a Stage as a parameter, which is used to create the game window.
+   */
   public void start(Stage stage) throws FileNotFoundException {
 
 

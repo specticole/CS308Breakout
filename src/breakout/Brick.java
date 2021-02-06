@@ -7,7 +7,13 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
+/**
+ * @author Cole Spector
+ * This class is used to create and manage each individual brick on the screen
+ * this class depends on Ball.java, Level.java and StatusDisplay.java
+ * In order to use this class, whenever you want to use a brick call the setup method, and call the isHit method whever a brick is interacted with.
+ * As was learned in class this week, this method should be split up into extensions, one for each brick type
+ */
 public class Brick {
 
   private static final String B_BRICK = "basicBrick.gif";
@@ -30,13 +36,23 @@ public class Brick {
   private char brickType;
   private Group root;
 
-
+  /**
+   * This is the initializer method
+   * this method will be called whenever a brick is initialized
+   * @param root this is the Group to which all javaFX objects should be added to too show up on screen.
+   */
   public Brick(Group root){
     //this.root = root;
     brickImage = new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(B_BRICK)));
     //this.brickType = brickType;
     //setBrickProperties(brickType);
   }
+
+  /**
+   * This method switches the type that the brick is
+   * brickType must be one of the defined types above
+   * @param brickType this is the type to swap the brick to.
+   */
 
   public void setBrickProperties(char brickType) {
     this.brickType = brickType;
@@ -61,10 +77,13 @@ public class Brick {
     }
   }
 
-
-//  private ImageView imageSetup(String fileName){
-//    return new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(fileName)));
-//  }
+  /**
+   * This is the method to be called whenever a brick is interacted with
+   * @param powerup this is the powerup declared in level.java
+   * @param x the x position of the brick
+   * @param y the y position of the brick
+   * @return the number of points to be added to the user's score
+   */
 
   public int isHit(Powerup powerup, double x, double y){
     switch(brickType) {
@@ -89,20 +108,35 @@ public class Brick {
     return 0;
   }
 
+
   private void switchImage(String newImage, char brickType){
     brickImage.setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(newImage)));
     this.brickType = brickType;
   }
 
+  /**
+   * This method returns the current brick's ImageView
+   * @return the ImageView for this brick
+   */
   public ImageView getImageView(){
     return brickImage;
   }
 
+
+  /**
+   * This method sets the x and y coordinates for the brick
+   * @param x the new x coordinate
+   * @param y the new y coordinate
+   */
   public void setXY(double x, double y){
     brickImage.setX(x);
     brickImage.setY(y);
   }
 
+  /**
+   * This method returns whether or not the brick is in play (i.e. not an empty space)
+   * @return whether or not the brick is empty
+   */
   public boolean inPlay(){
     return (brickType != EMPTY_CHAR);
   }

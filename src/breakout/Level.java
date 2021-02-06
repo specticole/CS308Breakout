@@ -10,6 +10,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import java.util.*;
 
+/**
+ * @author Cole Spector
+ * This is the driver class for my breakout game
+ * This class is dependant on all other classes in order to run properly
+ * In order to use this class, call setupGame to create a Scene, and create a KeyFrame link to step().
+ *
+ */
 public class Level {
 
   public static final int PADDLE_OFFSET = 10;
@@ -61,15 +68,22 @@ public class Level {
   private Queue<Ball> powerupBallQueue;
   private SplashScreen splashScreen;
 
-
-  public Level() throws FileNotFoundException {
+  /**
+   * This is the initializer for Level.java
+   * Initializing this class calls this method.
+   */
+  public Level() {
     allBricksOnScreen = new ArrayList<>();
     activeBalls = new ArrayList<>();
     powerupBallQueue = new LinkedList<>();
   }
 
 
-
+  /**
+   * This method is used to setup the javaFX scene
+   * It is assumed that the input file has 7 rows, each with 16 characters per row
+   * @return this method returns a created scene.
+   */
   public Scene setupGame(){
     root = new Group();
     powerup = new Powerup();
@@ -145,7 +159,11 @@ public class Level {
     paddle.setY(HEIGHT - PADDLE_OFFSET);
   }
 
-
+  /**
+   * This is the method which should be called in each frame in order to move objects
+   * This method is dependant on Ball.java, and Powerup.java
+   * @param stepTime this is the length of time encapsulated in each frame.
+   */
   public void step(double stepTime){
 
     if(!gameOver) {
@@ -189,7 +207,11 @@ public class Level {
     statusDisplay.reset();
   }
 
-
+  /**
+   * This function is called every time the user enters a key input
+   * This function is dependant on Ball.java
+   * @param keyPressed this is the KeyCode for the key pressed by the user.
+   */
   public void handleUserInput(KeyCode keyPressed) {
 
     //paddle movement
@@ -258,6 +280,10 @@ public class Level {
     }
   }
 
+  /**
+   * This method is called to go to the next level within the game.
+   * This method is dependant on the goToLevel method, which is dependant on the Ball.java and Powerup.java classes.
+   */
   public void goToNextLevel(){
     goToLevel(statusDisplay.getLevel() + 1);
   }

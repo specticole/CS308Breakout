@@ -7,7 +7,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 
-
+/**
+ * @author Cole Spector
+ * This method is used for the splash screen either at the beginning of the game, after the player loses, or after the player wins
+ * this class is dependant on StatusDisplay.java
+ * In order to use this class call showSplashScreen to show the splash screen, and then Hide to hide it
+ * As was learned in class this week, this class should be split into 3 different extensions of a SplashScreen class (one for each condition)
+ *
+ */
 public class SplashScreen {
   public static final String START_TEXT = "In this version of breakout, the obective is simple: \n"
       + "\t get to the top of the screen!\n"
@@ -35,7 +42,10 @@ public class SplashScreen {
   private Rectangle background;
   private Text text;
 
-
+  /**
+   * This is the initializer function for SplashScreen
+   * @param root this is the Group javaFX objects needed to be added to too show up on screen
+   */
   public SplashScreen(Group root){
     background = new Rectangle(0,0, WIDTH, HEIGHT);
     background.setFill(BACKGROUND);
@@ -43,6 +53,12 @@ public class SplashScreen {
     root.getChildren().addAll(background, text);
   }
 
+  /**
+   * This method presents a splash screen depending on the game condition and status display
+   * gameCondition must be one of the defined static values
+   * @param gameCondition this is the condition of the game (starting up, won, or lost)
+   * @param statusDisplay this is the status display declared in Level.java
+   */
   public void showSplashScreen(int gameCondition, StatusDisplay statusDisplay){
     String printText = "";
     switch (gameCondition){
@@ -75,7 +91,9 @@ public class SplashScreen {
     background.setOpacity(1);
   }
 
-
+  /**
+   * This method hides the splash screen
+   */
   public void hide(){
     background.setOpacity(0);
     text.setOpacity(0);

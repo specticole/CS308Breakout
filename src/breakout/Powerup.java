@@ -8,7 +8,15 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * @author Cole Spector
+ * This class controls the falling and activation of powerups within the game by creating a queue and filling it with subsequent Powerups.
+ * This class depends on information given in parameters from Level.java, and must be called from Brick.java
+ * In order to use this class, call the setup method, then implement the step method within the frame of the game, and the startDrop method must be called from whenever a block which should drop a powerup is destroyed.
+ * In order to add a new powerup, one should append onto the switch statement (which after a recent class, i learned should be swapped with child classes).
+ */
 public class Powerup {
+
 
   private static final String[] POWERUP_IMAGE_FILES = {"ballPowerup.gif", "lazerPowerup.gif", "paddlePowerup.gif"};
   private static final String LAZER_IMAGE = "lazerImage.gif";
@@ -33,7 +41,10 @@ public class Powerup {
   private ArrayList<ImageView> activeLazers;
 
 
-
+  /**
+   * This is the initializer method
+   *
+   */
   public Powerup(){
     activeLazers = new ArrayList<>();
     droppingPowerups = new ArrayList<>();
@@ -44,7 +55,11 @@ public class Powerup {
     isActive = false;
   }
 
-
+  /**
+   * This method sets up the powerups so that they can be used in the game
+   * there are no known assumptions which could cause this method to fail
+   * @param root this is the root to which the Javafx objects must be added to in order to appear on screen.
+   */
   public void setup(Group root){
     powerupQueue = new LinkedList<>();
     for(int i = 0; i < POWERUP_LIMIT; i ++){
@@ -56,11 +71,29 @@ public class Powerup {
     }
   }
 
+
+  /**
+   * This method is called once a block is broken, and a powerup should start dropping from that block
+   * there are no known assumptions which could cause this method to fail
+   * @param x This is the x position of the block which was hit
+   * @param y This is the y position of the block which was hit
+   */
   public void startDrop(double x, double y){
     droppingPowerups.add(powerupQueue.remove());
     droppingPowerups.get(droppingPowerups.size() - 1).powerupImage.setY(y);
     droppingPowerups.get(droppingPowerups.size() - 1).powerupImage.setX(x);
   }
+
+
+  /**
+   * This method is called within each frame of the game, and updates the position of all active powerups
+   * there are no known assumptions which could cause this method to fail
+   * @param paddle this is the paddle used in Level.java
+   * @param activeBalls this is the list of balls which are in play
+   * @param powerupBallQueue this is the queue of potential balls which can be added by a powerup
+   * @param allBricksOnScreen this is a 2D array of all the bricks on the screen
+   * @param brickRows this is the number of rows of bricks in each level
+   */
 
   public void move(ImageView paddle, ArrayList<Ball> activeBalls, Queue<Ball> powerupBallQueue, ArrayList<ArrayList<Brick>> allBricksOnScreen, int brickRows){
     int index = 0;
@@ -129,6 +162,12 @@ public class Powerup {
     }
   }
 
+  /**
+   * This method clears all of the powerups in use and falling on the screen
+   * There are no known assumptions which can cause this method to fail
+   *
+   */
+
   public void clearPowerups(){
     for(Powerup powerup : droppingPowerups){
       powerup.powerupImage.setOpacity(0);
@@ -141,7 +180,10 @@ public class Powerup {
     activeLazers.clear();
   }
 
-
+  /**
+   * this method returns the ImageView used for a powerup
+   * @return the ImageView for this specific powerup
+   */
   public ImageView getImage(){
     return powerupImage;
   }
